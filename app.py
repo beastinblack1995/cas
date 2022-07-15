@@ -1,4 +1,6 @@
 from flask import Flask, render_template, Response
+from sys import stdout
+import logging
 import cv2
 from makeup_artist import Makeup_artist
 import cv2
@@ -8,6 +10,7 @@ import os
 from datetime import  datetime
 from camera import Camera
 import base64
+from utils import base64_to_pil_image, pil_image_to_base64
 from PIL import Image
 from io import StringIO
 from io import BytesIO
@@ -61,8 +64,7 @@ for cl in myList :
     employeeName.append(os.path.splitext(cl)[0])
 
 #EncodeList = findEncoding(employeeImg)
-frame_rate = 24
-prev = 0
+
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(stdout))
 app.config['DEBUG'] = True
@@ -70,49 +72,46 @@ socketio = SocketIO(app)
 camera = Camera(Makeup_artist())  # use 0 for web camera
 def gen_frames():  # generate frame by frame from camera
     while True:
-        time_elapsed = time.time() - prev  
-        if time_elapsed > 1./frame_rate:
+        # Capture frame-by-frame
+        frame = camera.get_frame()
+        frame = readb64(frame)
+        print(frame)
+        
+        
 
-            # Capture frame-by-frame
-            frame = camera.get_frame()
-            frame = readb64(frame)
-            print(frame)
+        # facesInFrame = face_rec.face_locations(frame)
+        # encodeFacesInFrame = face_rec.face_encodings(frame, facesInFrame)
+        
 
+        # for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
+            # matches = face_rec.compare_faces(EncodeList, encodeFace)
+            # facedis = face_rec.face_distance(EncodeList, encodeFace)
+            # print(facedis)
+            # if min(facedis) < 0.5:
+                # matchIndex = np.argmin(facedis)
 
-
-            # facesInFrame = face_rec.face_locations(frame)
-            # encodeFacesInFrame = face_rec.face_encodings(frame, facesInFrame)
-
-
-            # for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
-                # matches = face_rec.compare_faces(EncodeList, encodeFace)
-                # facedis = face_rec.face_distance(EncodeList, encodeFace)
-                # print(facedis)
-                # if min(facedis) < 0.5:
-                    # matchIndex = np.argmin(facedis)
-
-                    # print(matchIndex)
+                # print(matchIndex)
 
 
-                    # name = employeeName[matchIndex].upper()
-                    # y1, x2, y2, x1 = faceloc
-                    # y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
-                    # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
-                    # cv2.rectangle(frame, (x1, y2-25), (x2, y2), (0, 255, 0), cv2.FILLED)
-                    # cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                    # MarkAttendence(name)
-                    # print(name)
+                # name = employeeName[matchIndex].upper()
+                # y1, x2, y2, x1 = faceloc
+                # y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
+                # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
+                # cv2.rectangle(frame, (x1, y2-25), (x2, y2), (0, 255, 0), cv2.FILLED)
+                # cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                # MarkAttendence(name)
+                # print(name)
 
-
-
-
-
-
-
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+        
+        
+        
+        
+        
+        
+        ret, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
 
 @app.route('/video_feed')
