@@ -75,7 +75,7 @@ def gen_frames():  # generate frame by frame from camera
         # Capture frame-by-frame
         frame = camera.get_frame()
         frame = readb64(frame)
-        print(frame)
+        
         
         
 
@@ -84,6 +84,7 @@ def gen_frames():  # generate frame by frame from camera
         
 
         for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
+            
             matches = face_rec.compare_faces(EncodeList, encodeFace)
             facedis = face_rec.face_distance(EncodeList, encodeFace)
             print('facedis',facedis)
