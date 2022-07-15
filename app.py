@@ -86,11 +86,11 @@ def gen_frames():  # generate frame by frame from camera
         for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
             matches = face_rec.compare_faces(EncodeList, encodeFace)
             facedis = face_rec.face_distance(EncodeList, encodeFace)
-            print(facedis)
-            if min(facedis) < 0.5:
+            print('facedis',facedis)
+            if min(facedis) < 1:
                 matchIndex = np.argmin(facedis)
 
-                print(matchIndex)
+                print('matchIndex',matchIndex)
 
 
                 name = employeeName[matchIndex].upper()
