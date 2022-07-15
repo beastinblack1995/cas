@@ -64,6 +64,8 @@ for cl in myList :
 frame_rate = 24
 prev = 0
 app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(stdout))
+app.config['DEBUG'] = True
 socketio = SocketIO(app)
 camera = Camera(Makeup_artist())  # use 0 for web camera
 def gen_frames():  # generate frame by frame from camera
