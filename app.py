@@ -61,8 +61,8 @@ for cl in myList :
     employeeName.append(os.path.splitext(cl)[0])
 
 #EncodeList = findEncoding(employeeImg)
- frame_rate = 24
- prev = 0
+frame_rate = 24
+prev = 0
 app = Flask(__name__)
 socketio = SocketIO(app)
 camera = Camera(Makeup_artist())  # use 0 for web camera
