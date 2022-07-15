@@ -5,7 +5,7 @@ import cv2
 from makeup_artist import Makeup_artist
 import cv2
 import numpy as np
-#import face_recognition as face_rec
+import face_recognition as face_rec
 import os
 from datetime import  datetime
 from camera import Camera
@@ -36,14 +36,14 @@ def readb64(base64_string):
     pimg = Image.open(sbuf)
     return cv2.cvtColor(np.array(pimg), cv2.COLOR_RGB2BGR)
 
-# def findEncoding(images) :
-    # imgEncodings = []
-    # for img in images :
-        # img = resize(img, 0.50)
-        # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        # encodeimg = face_rec.face_encodings(img)[0]
-        # imgEncodings.append(encodeimg)
-    # return imgEncodings
+def findEncoding(images) :
+    imgEncodings = []
+    for img in images :
+        img = resize(img, 0.50)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        encodeimg = face_rec.face_encodings(img)[0]
+        imgEncodings.append(encodeimg)
+    return imgEncodings
 def MarkAttendence(name):
     with open('attendence.csv', 'r+') as f:
         myDatalist =  f.readlines()
@@ -63,7 +63,7 @@ for cl in myList :
     employeeImg.append(curimg)
     employeeName.append(os.path.splitext(cl)[0])
 
-#EncodeList = findEncoding(employeeImg)
+EncodeList = findEncoding(employeeImg)
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(stdout))
@@ -79,28 +79,28 @@ def gen_frames():  # generate frame by frame from camera
         
         
 
-        # facesInFrame = face_rec.face_locations(frame)
-        # encodeFacesInFrame = face_rec.face_encodings(frame, facesInFrame)
+        facesInFrame = face_rec.face_locations(frame)
+        encodeFacesInFrame = face_rec.face_encodings(frame, facesInFrame)
         
 
-        # for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
-            # matches = face_rec.compare_faces(EncodeList, encodeFace)
-            # facedis = face_rec.face_distance(EncodeList, encodeFace)
-            # print(facedis)
-            # if min(facedis) < 0.5:
-                # matchIndex = np.argmin(facedis)
+        for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
+            matches = face_rec.compare_faces(EncodeList, encodeFace)
+            facedis = face_rec.face_distance(EncodeList, encodeFace)
+            print(facedis)
+            if min(facedis) < 0.5:
+                matchIndex = np.argmin(facedis)
 
-                # print(matchIndex)
+                print(matchIndex)
 
 
-                # name = employeeName[matchIndex].upper()
-                # y1, x2, y2, x1 = faceloc
-                # y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
-                # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
-                # cv2.rectangle(frame, (x1, y2-25), (x2, y2), (0, 255, 0), cv2.FILLED)
-                # cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                # MarkAttendence(name)
-                # print(name)
+                name = employeeName[matchIndex].upper()
+                y1, x2, y2, x1 = faceloc
+                y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
+                cv2.rectangle(frame, (x1, y2-25), (x2, y2), (0, 255, 0), cv2.FILLED)
+                cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                MarkAttendence(name)
+                print(name)
 
         
         
