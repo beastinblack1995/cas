@@ -75,6 +75,7 @@ def gen_frames():  # generate frame by frame from camera
         # Capture frame-by-frame
         frame = camera.get_frame()
         frame = readb64(frame)
+        print(frame)
         
         
         
