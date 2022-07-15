@@ -114,6 +114,19 @@ def gen_frames():  # generate frame by frame from camera
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
 
+
+@socketio.on('input image', namespace='/test')
+def test_message(input):
+    input = input.split(",")[1]
+    camera.enqueue_input(input)
+    #camera.enqueue_input(base64_to_pil_image(input))
+
+
+@socketio.on('connect', namespace='/test')
+def test_connect():
+    app.logger.info("client connected")
+
+
 @app.route('/video_feed')
 def video_feed():
     #Video streaming route. Put this in the src attribute of an img tag
