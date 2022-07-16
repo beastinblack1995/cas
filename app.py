@@ -93,8 +93,6 @@ def gen_frames():  # generate frame by frame from camera
             if min(facedis) < 1:
                 matchIndex = np.argmin(facedis)
 
-                print('matchIndex',matchIndex)
-
 
                 name = employeeName[matchIndex].upper()
                 y1, x2, y2, x1 = faceloc
