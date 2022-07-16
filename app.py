@@ -75,6 +75,7 @@ def gen_frames():  # generate frame by frame from camera
         # Capture frame-by-frame
         frame = camera.get_frame()
         frame = readb64(frame)
+        cv2.putText(frame, 'Unkown', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         
         
         
