@@ -85,7 +85,7 @@ def gen_frames():  # generate frame by frame from camera
         encodeFacesInFrame = face_rec.face_encodings(frame, facesInFrame)
         
         print(frame)
-
+        print(facesInFrame,encodeFacesInFrame)
         for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
             
             matches = face_rec.compare_faces(EncodeList, encodeFace)
