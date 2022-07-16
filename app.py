@@ -91,21 +91,21 @@ def gen_frames():  # generate frame by frame from camera
             matches = face_rec.compare_faces(EncodeList, encodeFace)
             facedis = face_rec.face_distance(EncodeList, encodeFace)
             print('facedis',facedis)
-            if min(facedis) < 1:
-                matchIndex = np.argmin(facedis)
+            
+            matchIndex = np.argmin(facedis)
 
 
-                name = employeeName[matchIndex].upper()
-                #y1, x2, y2, x1 = faceloc
-                #y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
-                #cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
-                #cv2.rectangle(frame, (x1, y2-25), (x2, y2), (0, 255, 0), cv2.FILLED)
-                #cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                startX, startY, endX, endY = faceloc
-                cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
+            name = employeeName[matchIndex].upper()
+            #y1, x2, y2, x1 = faceloc
+            #y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
+            #cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
+            #cv2.rectangle(frame, (x1, y2-25), (x2, y2), (0, 255, 0), cv2.FILLED)
+            #cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+            startX, startY, endX, endY = faceloc
+            cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
-                MarkAttendence(name)
-                print(name)
+            MarkAttendence(name)
+            print(name)
                 
 
         
