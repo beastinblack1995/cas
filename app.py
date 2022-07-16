@@ -75,14 +75,14 @@ def gen_frames():  # generate frame by frame from camera
         # Capture frame-by-frame
         frame = camera.get_frame()
         frame = readb64(frame)
-        print(frame)
+        
         
         
         
 
         facesInFrame = face_rec.face_locations(frame)
         encodeFacesInFrame = face_rec.face_encodings(frame, facesInFrame)
-        print(encodeFacesInFrame)
+        
         
 
         for encodeFace, faceloc in zip(encodeFacesInFrame, facesInFrame) :
